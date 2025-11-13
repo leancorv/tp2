@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Edr {
-    private GestorExamenes gestorExamenes;
+    private GestorDeExamenes gestorExamenes;
     private GestorNotas gestorNotas;
     private DetectorCopias detectorCopias;
     private CalculadorNotas calculadorNotas;

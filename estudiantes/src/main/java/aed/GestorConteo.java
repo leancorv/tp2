@@ -38,20 +38,6 @@ public class GestorConteo {
     }
     
     // OPERACIONES DE CONSULTA
-    public int obtenerRespuestaMasPopular(int ejercicio) {
-        validarEjercicio(ejercicio);
-        int maxConteo = -1;
-        int respuestaMasPopular = -1;
-        
-        for (int resp = 0; resp < 10; resp++) {
-            if (conteoRespuestas[ejercicio][resp] > maxConteo) {
-                maxConteo = conteoRespuestas[ejercicio][resp];
-                respuestaMasPopular = resp;
-            }
-        }
-        return respuestaMasPopular;
-    }
-    
     public int obtenerTotalRespuestasEjercicio(int ejercicio) {
         int total = 0;
         for (int resp = 0; resp < 10; resp++) {

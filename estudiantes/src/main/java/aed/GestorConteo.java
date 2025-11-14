@@ -36,18 +36,4 @@ public class GestorConteo {
         }
     }
     
-    // OPERACIONES DE CONSULTA
-    public int obtenerTotalRespuestasEjercicio(int ejercicio) {
-        int total = 0;
-        for (int resp = 0; resp < 10; resp++) {
-            total += conteoRespuestas[ejercicio][resp];
-        }
-        return total;
-    }
-    
-    public double obtenerPorcentajeRespuesta(int ejercicio, int respuesta, int totalEstudiantes) {
-        if (totalEstudiantes == 0) return 0.0;
-        return (double) conteoRespuestas[ejercicio][respuesta] / totalEstudiantes;
-    }
-    
 }

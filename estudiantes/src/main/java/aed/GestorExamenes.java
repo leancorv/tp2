@@ -36,9 +36,9 @@ public class GestorExamenes {
     }
     
     // OPERACIONES PARA DARK WEB
-    public void reemplazarExamenCompleto(int estudiante, List<Integer> nuevoExamen) {
+    public void reemplazarExamenCompleto(int estudiante, int[] nuevoExamen) {
         for (int ej = 0; ej < cantidadEjercicios; ej++) {
-            examenes[estudiante][ej] = nuevoExamen.get(ej);
+            examenes[estudiante][ej] = nuevoExamen[ej];
         }
     }
     

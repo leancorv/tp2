@@ -4,19 +4,22 @@ import java.util.List;
 
 public class DetectorCopias {
     
-    public List<Integer> detectarCopias(GestorExamenes gestorExamenes, 
+    public int[] detectarCopias(GestorExamenes gestorExamenes, 
                                       GestorConteo gestorConteo,
                                       GestorNotas gestorNotas,
                                       int cantidadEstudiantes) {
         
-        List<Integer> sospechosos = new ArrayList<>();
+        int[] sospechosos = new int[0];
         int cantidadEjercicios = gestorExamenes.obtenerCantidadEjercicios();
         
         for (int est = 0; est < cantidadEstudiantes; est++) {
             if (!gestorNotas.estaEntregado(est)) continue;
             
             if (esSospechoso(est, gestorExamenes, gestorConteo, cantidadEstudiantes, cantidadEjercicios)) {
-                sospechosos.add(est);
+                // No se puede usar add en un array, se debería usar una estructura dinámica o manejar el array de otra forma
+                int[] nuevoArray = new int[sospechosos.length + 1];
+                nuevoArray[sospechosos.length] = est;
+                sospechosos = nuevoArray;
             }
         }
         

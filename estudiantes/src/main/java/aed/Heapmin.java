@@ -116,7 +116,6 @@ public class Heapmin<T extends Comparable<T>> {
     }
 
     public void actualizar(Handle<T> h, T nuevoValor) {
-        if (!(h instanceof Heapmin.HandleHeapmin)) return;
         
         HandleHeapmin handle = (HandleHeapmin) h;
         if (handle.estaEliminado()) return;

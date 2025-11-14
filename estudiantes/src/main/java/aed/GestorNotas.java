@@ -81,12 +81,14 @@ public class GestorNotas {
 
     // OPERACIONES DE REGISTRO
     public Handle<Nota> registrarEstudiante(int estudianteId) {
-        return registrarEstudiante(estudianteId, 0.0);
+        return registrarEstudianteAux(estudianteId, 0.0);
     }
+    
 
-    public Handle<Nota> registrarEstudiante(int estudianteId, double notaInicial) {
+    public Handle<Nota> registrarEstudianteAux(int estudianteId, double notaInicial) {
         if (handlesPorEstudiante[estudianteId] != null) {
-            return;
+        // ya está registrado, devolvemos el handle existente
+        return handlesPorEstudiante[estudianteId];
         }
 
         Nota nuevaNota = new Nota(estudianteId, notaInicial);

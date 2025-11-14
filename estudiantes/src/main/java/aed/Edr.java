@@ -14,20 +14,20 @@ public class Edr {
     private int ladoAula;
     private int cantidadEstudiantes;
 
-    public static Edr nuevoEdr(int ladoAula, int cantidadEstudiantes, List<Integer> examenCanonico) {
+    public static Edr nuevoEdr(int ladoAula, int cantidadEstudiantes, int[] examenCanonico) {
         return new Edr(ladoAula, cantidadEstudiantes, examenCanonico);
     }
     
-    private Edr(int ladoAula, int cantidadEstudiantes, List<Integer> examenCanonico) {
+    public Edr(int ladoAula, int cantidadEstudiantes, int[] examenCanonico) {
         this.ladoAula = ladoAula;
         this.cantidadEstudiantes = cantidadEstudiantes;
         
-        this.gestorExamenes = new GestorExamenes(cantidadEstudiantes, examenCanonico.size());
+        this.gestorExamenes = new GestorExamenes(cantidadEstudiantes, examenCanonico.length);
         this.gestorNotas = new GestorNotas(cantidadEstudiantes);
         this.detectorCopias = new DetectorCopias();
         this.calculadorNotas = new CalculadorNotas(examenCanonico);
         this.buscadorVecinos = new BuscadorVecinos(ladoAula, cantidadEstudiantes);
-        this.gestorConteo = new GestorConteo(examenCanonico.size());
+        this.gestorConteo = new GestorConteo(examenCanonico.length);
         
         for (int i = 0; i < cantidadEstudiantes; i++) {
             gestorNotas.registrarEstudiante(i);
@@ -62,16 +62,16 @@ public class Edr {
         gestorExamenes.establecerRespuesta(estudiante, numeroEjercicio, respuestaEjercicio);
         
         // Actualizar nota
-        int nuevaNota = calculadorNotas.calcularNota(gestorExamenes.obtenerExamen(estudiante));
+        int nuevaNota = calculadorNotas.calcularNota(gestorExamenes, estudiante);
         gestorNotas.actualizarNota(estudiante, nuevaNota);
     }
     
     // OPERACIÓN 4: consultarDarkWeb
-    public void consultarDarkWeb(int k, List<Integer> examenDW) {
-        List<NodoHeap> peoresEstudiantes = gestorNotas.obtenerKPeores(k);
+    public void consultarDarkWeb(int k, int[] examenDW) {
+        List<Nota> peoresEstudiantes = gestorNotas.obtenerKPeores(k);
         
-        for (NodoHeap nodo : peoresEstudiantes) {
-            int estudiante = nodo.estudiante;
+        for (Nota nodo : peoresEstudiantes) {
+            int estudiante = nodo.getEstudianteId();
             
             // Limpiar respuestas anteriores del conteo
             for (int ej = 0; ej < gestorExamenes.obtenerCantidadEjercicios(); ej++) {
@@ -86,13 +86,14 @@ public class Edr {
             
             // Actualizar conteos nuevos
             for (int ej = 0; ej < gestorExamenes.obtenerCantidadEjercicios(); ej++) {
-                int respuesta = examenDW.get(ej);
+                int respuesta = examenDW[ej];
                 gestorConteo.incrementarConteo(ej, respuesta);
             }
             
             // Actualizar nota y reinsertar
-            int nuevaNota = calculadorNotas.calcularNota(gestorExamenes.obtenerExamen(estudiante));
-            gestorNotas.reinsertarEstudiante(new NodoHeap(estudiante, nuevaNota));
+            int nuevaNota = calculadorNotas.calcularNota(gestorExamenes, estudiante);
+            gestorNotas.actualizarNota(estudiante, nuevaNota);
+            // gestorNotas.actualizarHandles();
         }
     }
     
@@ -107,8 +108,8 @@ public class Edr {
     }
     
     // OPERACIÓN 7: chequearCopias
-    public List<Integer> chequearCopias() {
-        List<Integer> sospechosos = detectorCopias.detectarCopias(
+    public int[] chequearCopias() {
+        int[] sospechosos = detectorCopias.detectarCopias(
             gestorExamenes, gestorConteo, gestorNotas, cantidadEstudiantes);
         
         // Eliminar sospechosos del sistema de notas

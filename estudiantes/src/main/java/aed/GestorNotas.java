@@ -74,11 +74,8 @@ public class GestorNotas {
     }
 
     public Handle<Nota> registrarEstudiante(int estudianteId, double notaInicial) {
-        if (estudianteId < 0 || estudianteId >= capacidad) {
-            throw new IllegalArgumentException("ID de estudiante fuera de rango");
-        }
         if (handlesPorEstudiante[estudianteId] != null) {
-            throw new IllegalArgumentException("El estudiante ya está registrado");
+            return;
         }
 
         Nota nuevaNota = new Nota(estudianteId, notaInicial);

@@ -97,7 +97,7 @@ public class Edr {
     }
     
     // OPERACIÓN 5: notas
-    public List<Double> notas() {
+    public double[] notas() {
         return gestorNotas.obtenerTodasNotas();
     }
     
@@ -120,8 +120,8 @@ public class Edr {
     }
     
     // OPERACIÓN 8: corregir
-    public List<NotaFinal> corregir() {
-        return gestorNotas.obtenerTodosOrdenados();
+    public NotaFinal[] corregir() {
+        return gestorNotas.obtenerEstudiantesEntregados();
     }
     
     // MÉTODOS AUXILIARES PRIVADOS

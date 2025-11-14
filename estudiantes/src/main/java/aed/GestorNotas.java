@@ -49,12 +49,13 @@ public class GestorNotas {
             if (this.entregado && !otra.entregado) return -1;
             
             // 2. Menor nota tiene prioridad sobre mayor nota
-            if (this.nota < otra.nota) return 1;
-            if (this.nota > otra.nota) return -1;
+            if (this.valor < otra.valor) return 1;
+            if (this.valor > otra.valor) return -1;
             
             // 3. Mayor ID tiene prioridad sobre menor ID
-            if this.estudiante>otra.estudiante return 1
-            if this.estudiante<otra.estudiante return -1
+            if (this.estudianteId > otra.estudianteId) return 1;
+            if (this.estudianteId < otra.estudianteId) return -1;
+            return 0;
         }
 
         @Override
@@ -168,25 +169,27 @@ public class GestorNotas {
     }
 
     // MÉTODOS DE CONSULTA GENERAL
-    public List<Double> obtenerTodasNotas() {
-        List<Double> todas = new ArrayList<>();
+    public double[] obtenerTodasNotas() {
+        double[] todas = new double[cantidad];
+        int index = 0;
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
-                todas.add(((Nota) ((Heapmin.HandleHeapmin) handle).getElemento()).getValor());
+                todas[index++] = ((Nota) ((Heapmin.HandleHeapmin) handle).getElemento()).getValor();
             }
         }
         return todas;
     }
 
-    public List<Nota> obtenerEstudiantesEntregados() {
-        List<Nota> entregados = new ArrayList<>();
+    public NotaFinal[] obtenerEstudiantesEntregados() {
+        NotaFinal[] entregados = new NotaFinal[cantidad];
+        int index = 0;
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
                 Nota nota = (Nota) ((Heapmin.HandleHeapmin) handle).getElemento();
                 if (nota.isEntregado()) {
-                    entregados.add(nota);
+                    entregados[index++] = new NotaFinal(nota.getValor(), nota.getEstudianteId());
                 }
             }
         }

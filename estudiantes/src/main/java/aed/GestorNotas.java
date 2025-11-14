@@ -44,7 +44,17 @@ public class GestorNotas {
 
         @Override
         public int compareTo(Nota otra) {
-            return Double.compare(this.valor, otra.valor);
+            // 1. No entregados tienen prioridad sobre entregados
+            if (!this.entregado && otra.entregado) return 1;
+            if (this.entregado && !otra.entregado) return -1;
+            
+            // 2. Menor nota tiene prioridad sobre mayor nota
+            if (this.nota < otra.nota) return 1;
+            if (this.nota > otra.nota) return -1;
+            
+            // 3. Mayor ID tiene prioridad sobre menor ID
+            if this.estudiante>otra.estudiante return 1
+            if this.estudiante<otra.estudiante return -1
         }
 
         @Override

@@ -14,7 +14,7 @@ public class CalculadorNotas {
         int ejerciciosCorrectos = 0;
 
         for (int ej = 0; ej < cantidadEjercicios; ej++) {
-            if (gestorExamenes.obtenerExamen(estudiante)[ej] != -1 && gestorExamenes.obtenerExamen(estudiante)[ej] == examenCanonico.length) {
+            if (gestorExamenes.obtenerExamen(estudiante)[ej] != -1 && gestorExamenes.obtenerExamen(estudiante)[ej] == examenCanonico[ej]) {
                 ejerciciosCorrectos++;
             }
         }

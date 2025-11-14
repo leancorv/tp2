@@ -42,11 +42,6 @@ public class GestorExamenes {
         }
     }
     
-    public void limpiarExamen(int estudiante) {
-        for (int ej = 0; ej < cantidadEjercicios; ej++) {
-            examenes[estudiante][ej] = -1;
-        }
-    }
     
     // OPERACIONES DE CONSULTA
     public int obtenerCantidadEjercicios() {

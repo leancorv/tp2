@@ -25,7 +25,6 @@ public class GestorConteo {
     
     
     public void limpiarConteoEjercicio(int ejercicio) {
-        validarEjercicio(ejercicio);
         for (int i = 0; i < 10; i++) {
             conteoRespuestas[ejercicio][i] = 0;
         }

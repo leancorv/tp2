@@ -1,6 +1,6 @@
+package aed;
 import java.util.ArrayList;
 import java.util.List;
-package aed;
 
 public class DetectorCopias {
     

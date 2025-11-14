@@ -2,8 +2,10 @@ package aed;
 import java.util.ArrayList;
 import java.util.List;
 
+import aed.GestorNotas.Nota;
+
 public class Edr {
-    private GestorDeExamenes gestorExamenes;
+    private GestorExamenes gestorExamenes;
     private GestorNotas gestorNotas;
     private DetectorCopias detectorCopias;
     private CalculadorNotas calculadorNotas;
@@ -95,7 +97,7 @@ public class Edr {
     }
     
     // OPERACIÓN 5: notas
-    public List<Integer> notas() {
+    public List<Double> notas() {
         return gestorNotas.obtenerTodasNotas();
     }
     

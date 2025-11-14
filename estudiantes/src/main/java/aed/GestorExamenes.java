@@ -2,12 +2,12 @@ package aed;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestorDeExamenes {
+public class GestorExamenes {
     private int[][] examenes;
     private int cantidadEstudiantes;
     private int cantidadEjercicios;
 
-    public GestorDeExamenes(int cantidadEstudiantes, int cantidadEjercicios) {
+    public GestorExamenes(int cantidadEstudiantes, int cantidadEjercicios) {
         this.cantidadEstudiantes = cantidadEstudiantes;
         this.cantidadEjercicios = cantidadEjercicios;
         this.examenes = new int[cantidadEstudiantes][cantidadEjercicios];

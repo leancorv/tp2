@@ -94,7 +94,7 @@ public class GestorNotas {
 
         Handle<Nota> handle = handlesPorEstudiante[estudianteId];
         Nota notaActualizada = new Nota(estudianteId, nuevaNota, 
-                                      ((Heapmin.HandleHeapmin) handle).getElemento().isEntregado());
+                                      ((Nota) ((Heapmin.HandleHeapmin) handle).getElemento()).isEntregado());
         heapNotas.actualizar(handle, notaActualizada);
         return true;
     }
@@ -103,7 +103,7 @@ public class GestorNotas {
         if (!existeEstudiante(estudianteId)) return;
 
         Handle<Nota> handle = handlesPorEstudiante[estudianteId];
-        Nota notaActual = ((Heapmin.HandleHeapmin) handle).getElemento();
+        Nota notaActual = (Nota) ((Heapmin.HandleHeapmin) handle).getElemento();
         Nota notaActualizada = new Nota(estudianteId, notaActual.getValor(), true);
         heapNotas.actualizar(handle, notaActualizada);
     }
@@ -121,13 +121,13 @@ public class GestorNotas {
     public boolean estaEntregado(int estudianteId) {
         if (!existeEstudiante(estudianteId)) return false;
         Handle<Nota> handle = handlesPorEstudiante[estudianteId];
-        return ((Heapmin.HandleHeapmin) handle).getElemento().isEntregado();
+        return ((Nota) ((Heapmin.HandleHeapmin) handle).getElemento()).isEntregado();
     }
 
     public Double obtenerNota(int estudianteId) {
         if (!existeEstudiante(estudianteId)) return null;
         Handle<Nota> handle = handlesPorEstudiante[estudianteId];
-        return ((Heapmin.HandleHeapmin) handle).getElemento().getValor();
+        return ((Nota) ((Heapmin.HandleHeapmin) handle).getElemento()).getValor();
     }
 
     public Handle<Nota> obtenerHandle(int estudianteId) {
@@ -161,12 +161,12 @@ public class GestorNotas {
     }
 
     // MÉTODOS DE CONSULTA GENERAL
-    public List<Nota> obtenerTodasNotas() {
-        List<Nota> todas = new ArrayList<>();
+    public List<Double> obtenerTodasNotas() {
+        List<Double> todas = new ArrayList<>();
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
-                todas.add(((Heapmin.HandleHeapmin) handle).getElemento());
+                todas.add(((Nota) ((Heapmin.HandleHeapmin) handle).getElemento()).getValor());
             }
         }
         return todas;
@@ -177,7 +177,7 @@ public class GestorNotas {
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
-                Nota nota = ((Heapmin.HandleHeapmin) handle).getElemento();
+                Nota nota = (Nota) ((Heapmin.HandleHeapmin) handle).getElemento();
                 if (nota.isEntregado()) {
                     entregados.add(nota);
                 }
@@ -205,7 +205,7 @@ public class GestorNotas {
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
-                Nota notaOriginal = ((Heapmin.HandleHeapmin) handle).getElemento();
+                Nota notaOriginal = (Nota) ((Heapmin.HandleHeapmin) handle).getElemento();
                 copia.agregar(new Nota(notaOriginal.getEstudianteId(), 
                                      notaOriginal.getValor(), 
                                      notaOriginal.isEntregado()));

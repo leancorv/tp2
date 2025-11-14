@@ -1,5 +1,7 @@
 package aed;
 
+import java.util.List;
+
 public class CalculadorNotas {
     private List<Integer> examenCanonico;
     private int cantidadEjercicios;
@@ -13,7 +15,7 @@ public class CalculadorNotas {
         int ejerciciosCorrectos = 0;
 
         for (int ej = 0; ej < cantidadEjercicios; ej++) {
-            if (examenEstudiante[ej] != -1 && examenEstudiante[ej] == examenCanonico.get(ej)) {
+            if (gestorExamenes.obtenerExamen(estudiante)[ej] != -1 && gestorExamenes.obtenerExamen(estudiante)[ej] == examenCanonico.get(ej)) {
                 ejerciciosCorrectos++;
             }
         }

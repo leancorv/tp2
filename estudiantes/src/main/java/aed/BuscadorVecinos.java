@@ -2,6 +2,8 @@ package aed;
 import java.util.ArrayList;
 import java.util.List;
 
+//Nos creamos el constructor y notar que todas estas operaciones estan acotadas porque solo hay 3 posibles vecinos como max
+//Asi que en el fondo todas las operaciones terminan siendo O(1)
 public class BuscadorVecinos {
     private int cantidadEstudiantes;
     private int cantidadEstudiantesxFila; 

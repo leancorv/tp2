@@ -68,7 +68,11 @@ public class GestorNotas {
 
         @Override
         public String toString() {
-            return String.format("Est%d: %.1f%s", estudianteId, valor, entregado ? " (ent)" : "");
+            String resultado = "Est" + estudianteId + ": " + valor;
+            if (entregado) {
+                resultado += " (ent)";
+            }
+            return resultado;
         }
     }
 

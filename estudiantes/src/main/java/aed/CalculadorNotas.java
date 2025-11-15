@@ -1,6 +1,7 @@
 package aed;
 
-
+//Nos creamos el constructor y lo que hacemos en el fondo siempre son comparaciones por acceso directo a arrays y sumando y restando 1,
+//por lo que calcular la nota siempre es O(R)
 public class CalculadorNotas {
     private int[] examenCanonico;
     private int cantidadEjercicios;

@@ -7,6 +7,8 @@ public class GestorExamenes {
     private int cantidadEstudiantes;
     private int cantidadEjercicios;
 
+    //El constructor donde inicializamos un arreglo de EXR elementos con respuestas en blanco, -1
+    //Complejidad es O(EXR)
     public GestorExamenes(int cantidadEstudiantes, int cantidadEjercicios) {
         this.cantidadEstudiantes = cantidadEstudiantes;
         this.cantidadEjercicios = cantidadEjercicios;
@@ -18,6 +20,8 @@ public class GestorExamenes {
             }
         }
     }
+
+    //Todas estas operaciones son O(1) por ser acceso a arrays y cambiar o consultar valores en ellos
     
     public void establecerRespuesta(int estudiante, int ejercicio, int respuesta) {
         examenes[estudiante][ejercicio] = respuesta;
@@ -36,6 +40,7 @@ public class GestorExamenes {
     }
     
     // OPERACIONES PARA DARK WEB
+    //Notar que aca si o si tenes que recorrer todo el examen de cada uno de los k copiones y copiarlo asi que es O(kR)
     public void reemplazarExamenCompleto(int estudiante, int[] nuevoExamen) {
         for (int ej = 0; ej < cantidadEjercicios; ej++) {
             examenes[estudiante][ej] = nuevoExamen[ej];
@@ -43,7 +48,7 @@ public class GestorExamenes {
     }
     
     
-    // OPERACIONES DE CONSULTA
+    // OPERACIONES DE CONSULTA O(1)
     public int obtenerCantidadEjercicios() {
         return cantidadEjercicios;
     }

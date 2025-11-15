@@ -115,6 +115,23 @@ public class Heapmin<T extends Comparable<T>> {
         return minimo;
     }
 
+    public T sacarMinimoSinEliminar() {
+        if (this.size == 0) {
+            return null;
+        }
+        
+        T minimo = heap[0].valor();
+        
+        // Lógica de sacar sin marcar como eliminado
+        swap(0, size - 1);
+        size--;
+        if (size > 0) {
+            siftDown(0);
+        }
+        
+        return minimo;
+    }
+
     public void actualizar(Handle<T> h, T nuevoValor) {
         
         HandleHeapmin handle = (HandleHeapmin) h;

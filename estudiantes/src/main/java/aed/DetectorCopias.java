@@ -2,6 +2,10 @@ package aed;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Nos creamos el constructor y lo que hacemos es recorrer para cada estudiante, es decir E veces, recorremos el conteo que tiene largo R
+//para confirmar si ese estudiante es sospechoso por lo que la complejidad termina siendo O(ExR), notar que cambiar las lista de tipo
+//son solo O(E) por separado por lo que sigue ganando O(ExR)
 public class DetectorCopias {
     
     public int[] detectarCopias(GestorExamenes gestorExamenes, 
@@ -33,7 +37,9 @@ public class DetectorCopias {
         }
         return resultado;
     }
-    
+
+    //En es sospechoso, accedemos por id a su respuesta en el examen y al conteo ambas operaciones O(1) por ser arrrays
+    //Luego son todas comparaciones matematicas O(1)
     private boolean esSospechoso(int estudiante, GestorExamenes gestorExamenes,
                                GestorConteo gestorConteo, int cantidadEstudiantes, 
                                int cantidadEjercicios) {

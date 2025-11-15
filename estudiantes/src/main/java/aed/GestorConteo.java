@@ -1,5 +1,6 @@
 package aed;
 
+//Como es acceso y modificacion directa por posicion de un array todo es O(1)
 public class GestorConteo {
     private int[][] conteoRespuestas;
     

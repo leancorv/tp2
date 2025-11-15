@@ -184,18 +184,25 @@ public class GestorNotas {
     }
 
     public NotaFinal[] obtenerEstudiantesEntregados() {
-        NotaFinal[] entregados = new NotaFinal[cantidad];
-        int index = 0;
+        List<NotaFinal> entregados = new ArrayList<>();
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
                 Nota nota = (Nota) ((Heapmin.HandleHeapmin) handle).getElemento();
                 if (nota.isEntregado()) {
-                    entregados[index++] = new NotaFinal(nota.getValor(), nota.getEstudianteId());
+                    entregados.add(new NotaFinal(nota.getValor(), nota.getEstudianteId()));
                 }
             }
         }
-        return entregados;
+
+        // Ordenar por nota descendente, y en empate por estudianteId descendente
+        entregados.sort((a, b) -> {
+            int cmp = Double.compare(b._nota, a._nota);
+            if (cmp != 0) return cmp;
+            return Integer.compare(b._id, a._id);
+        });
+
+        return entregados.toArray(new NotaFinal[0]);
     }
 
     public boolean existeEstudiante(int estudianteId) {

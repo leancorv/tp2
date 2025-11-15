@@ -42,8 +42,13 @@ public class DetectorCopias {
 
         int otrosEstudiantes = cantidadEstudiantes - 1;
 
+        int respuestasContestadas = 0;
+
         for (int ej = 0; ej < cantidadEjercicios; ej++) {
             if (!gestorExamenes.tieneRespuesta(estudiante, ej)) continue;
+
+            // Contabilizar cuántas respuestas aportó el estudiante
+            respuestasContestadas++;
 
             int respuesta = gestorExamenes.obtenerRespuesta(estudiante, ej);
             int totalConMismaRespuesta = gestorConteo.obtenerConteo(ej, respuesta);
@@ -54,10 +59,13 @@ public class DetectorCopias {
             double porcentaje = (double) otrosConMismaRespuesta / (double) otrosEstudiantes;
 
             // Si alguna respuesta del estudiante NO alcanza el umbral, no es sospechoso
-            if (porcentaje <= 0.25) {
+            if (porcentaje < 0.25) {
                 return false;
             }
         }
+
+        // Si el estudiante no respondió ninguna pregunta, no puede ser sospechoso
+        if (respuestasContestadas == 0) return false;
 
         // Todas las respuestas alcanzaron el umbral => sospechoso
         return true;

@@ -212,7 +212,7 @@ public class Heapmin<T extends Comparable<T>> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         sb.append("[");
         for (int i = 0; i < size; i++) {
             if (!((HandleHeapmin) heap[i]).estaEliminado()) {

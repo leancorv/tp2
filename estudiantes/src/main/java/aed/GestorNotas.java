@@ -165,23 +165,12 @@ public class GestorNotas {
 
     public List<Nota> obtenerKPeores(int k) {
         List<Nota> peores = new ArrayList<>();
-        List<Nota> temporal = new ArrayList<>();
+        Heapmin<Nota> copia = crearCopiaHeap();
         
-        // Paso 1: Sacar k elementos sin eliminarlos - O(k log E)
-        for (int i = 0; i < k && !heapNotas.estaVacio(); i++) {
-            Nota menor = heapNotas.sacarMinimoSinEliminar();
-            if (menor != null) {
-                peores.add(menor);
-                temporal.add(menor);
-            }
+        for (int i = 0; i < k && !copia.estaVacio(); i++) {
+            Nota menor = copia.sacarMinimo();
+            peores.add(menor);
         }
-        
-        // Paso 2: Reinsertar los elementos - O(k log E)
-        for (Nota nota : temporal) {
-            heapNotas.agregar(nota);
-            // NO actualizar handlesPorEstudiante - los handles originales siguen válidos
-        }
-        
         return peores;
     }
 
@@ -200,8 +189,6 @@ public class GestorNotas {
 
     public NotaFinal[] obtenerEstudiantesEntregados() {
         List<NotaFinal> entregados = new ArrayList<>();
-        
-        // Busco todos los estudiantes entregados
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
@@ -212,13 +199,14 @@ public class GestorNotas {
             }
         }
 
-        // Convertimos List a array manualmente
-        NotaFinal[] resultado = new NotaFinal[entregados.size()];
-        for (int i = entregados.size()-1; i >= 0; i--) {
-            resultado[i] = entregados.get(i);
-        }
-        
-        return resultado;
+        // Ordenar por nota descendente, y en empate por estudianteId descendente
+        entregados.sort((a, b) -> {
+            int cmp = Double.compare(b._nota, a._nota);
+            if (cmp != 0) return cmp;
+            return Integer.compare(b._id, a._id);
+        });
+
+        return entregados.toArray(new NotaFinal[0]);
     }
 
     public boolean existeEstudiante(int estudianteId) {
@@ -235,6 +223,20 @@ public class GestorNotas {
     }
 
     // MÉTODOS AUXILIARES
+    private Heapmin<Nota> crearCopiaHeap() {
+        Heapmin<Nota> copia = new Heapmin<>(capacidad);
+        for (int i = 0; i < capacidad; i++) {
+            if (handlesPorEstudiante[i] != null) {
+                Handle<Nota> handle = handlesPorEstudiante[i];
+                Nota notaOriginal = (Nota) ((Heapmin.HandleHeapmin) handle).getElemento();
+                copia.agregar(new Nota(notaOriginal.getEstudianteId(), 
+                                     notaOriginal.getValor(), 
+                                     notaOriginal.isEntregado()));
+            }
+        }
+        return copia;
+    }
+
     public void actualizarHandles() {
         // Verificar consistencia de handles
         for (int i = 0; i < capacidad; i++) {

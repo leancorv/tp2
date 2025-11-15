@@ -165,12 +165,23 @@ public class GestorNotas {
 
     public List<Nota> obtenerKPeores(int k) {
         List<Nota> peores = new ArrayList<>();
-        Heapmin<Nota> copia = crearCopiaHeap();
+        List<Nota> temporal = new ArrayList<>();
         
-        for (int i = 0; i < k && !copia.estaVacio(); i++) {
-            Nota menor = copia.sacarMinimo();
-            peores.add(menor);
+        // Paso 1: Sacar k elementos sin eliminarlos - O(k log E)
+        for (int i = 0; i < k && !heapNotas.estaVacio(); i++) {
+            Nota menor = heapNotas.sacarMinimoSinEliminar();
+            if (menor != null) {
+                peores.add(menor);
+                temporal.add(menor);
+            }
         }
+        
+        // Paso 2: Reinsertar los elementos - O(k log E)
+        for (Nota nota : temporal) {
+            heapNotas.agregar(nota);
+            // NO actualizar handlesPorEstudiante - los handles originales siguen válidos
+        }
+        
         return peores;
     }
 
@@ -223,20 +234,6 @@ public class GestorNotas {
     }
 
     // MÉTODOS AUXILIARES
-    private Heapmin<Nota> crearCopiaHeap() {
-        Heapmin<Nota> copia = new Heapmin<>(capacidad);
-        for (int i = 0; i < capacidad; i++) {
-            if (handlesPorEstudiante[i] != null) {
-                Handle<Nota> handle = handlesPorEstudiante[i];
-                Nota notaOriginal = (Nota) ((Heapmin.HandleHeapmin) handle).getElemento();
-                copia.agregar(new Nota(notaOriginal.getEstudianteId(), 
-                                     notaOriginal.getValor(), 
-                                     notaOriginal.isEntregado()));
-            }
-        }
-        return copia;
-    }
-
     public void actualizarHandles() {
         // Verificar consistencia de handles
         for (int i = 0; i < capacidad; i++) {

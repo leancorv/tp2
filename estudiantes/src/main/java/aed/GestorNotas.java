@@ -200,6 +200,8 @@ public class GestorNotas {
 
     public NotaFinal[] obtenerEstudiantesEntregados() {
         List<NotaFinal> entregados = new ArrayList<>();
+        
+        // Busco todos los estudiantes entregados
         for (int i = 0; i < capacidad; i++) {
             if (handlesPorEstudiante[i] != null) {
                 Handle<Nota> handle = handlesPorEstudiante[i];
@@ -210,14 +212,13 @@ public class GestorNotas {
             }
         }
 
-        // Ordenar por nota descendente, y en empate por estudianteId descendente
-        entregados.sort((a, b) -> {
-            int cmp = Double.compare(b._nota, a._nota);
-            if (cmp != 0) return cmp;
-            return Integer.compare(b._id, a._id);
-        });
-
-        return entregados.toArray(new NotaFinal[0]);
+        // Convertimos List a array manualmente
+        NotaFinal[] resultado = new NotaFinal[entregados.size()];
+        for (int i = entregados.size()-1; i >= 0; i--) {
+            resultado[i] = entregados.get(i);
+        }
+        
+        return resultado;
     }
 
     public boolean existeEstudiante(int estudianteId) {

@@ -26,4 +26,10 @@ public class CalculadorNotas {
         return porcentaje;
     }
 
+    // Indica si una respuesta dada para un ejercicio es la correcta
+    public boolean esRespuestaCorrecta(int ejercicio, int respuesta) {
+        if (ejercicio < 0 || ejercicio >= cantidadEjercicios) return false;
+        return examenCanonico[ejercicio] == respuesta;
+    }
+
 }

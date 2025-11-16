@@ -13,6 +13,9 @@ public class Edr {
     private GestorConteo gestorConteo;
     private int ladoAula;
     private int cantidadEstudiantes;
+    private boolean[] historyCopio;
+    private int[] usadoComoFuente;
+    private int[] copioContador;
 
     public static Edr nuevoEdr(int ladoAula, int cantidadEstudiantes, int[] examenCanonico) {
         return new Edr(ladoAula, cantidadEstudiantes, examenCanonico);
@@ -32,6 +35,13 @@ public class Edr {
         for (int i = 0; i < cantidadEstudiantes; i++) {
             gestorNotas.registrarEstudiante(i);
         }
+        // Inicializar trackers de copias
+        this.historyCopio = new boolean[cantidadEstudiantes];
+        this.usadoComoFuente = new int[cantidadEstudiantes];
+        this.copioContador = new int[cantidadEstudiantes];
+        for (int i = 0; i < cantidadEstudiantes; i++) this.historyCopio[i] = false;
+        for (int i = 0; i < cantidadEstudiantes; i++) this.usadoComoFuente[i] = 0;
+        for (int i = 0; i < cantidadEstudiantes; i++) this.copioContador[i] = 0;
     }
     
     // OPERACIÓN 2: copiarse
@@ -43,6 +53,10 @@ public class Edr {
         
         if (mejorVecino != -1) {
             copiarPrimerEjercicio(estudiante, mejorVecino);
+            // Registrar que este estudiante copió y que el vecino fue usado como fuente
+            historyCopio[estudiante] = true;
+            copioContador[estudiante]++;
+            usadoComoFuente[mejorVecino]++;
         }
     }
     
@@ -111,7 +125,17 @@ public class Edr {
     public int[] chequearCopias() {
         int[] sospechosos = detectorCopias.detectarCopias(
             gestorExamenes, gestorConteo, gestorNotas, cantidadEstudiantes);
-        
+        // Filtrar sospechosos: excluir a quienes fueron usados más como fuente que quienes copiaron
+        List<Integer> lista = new ArrayList<>();
+        for (int s : sospechosos) lista.add(s);
+        List<Integer> listaFinal = new ArrayList<>();
+        for (Integer idx : lista) {
+            if (usadoComoFuente[idx] > copioContador[idx]) continue;
+            listaFinal.add(idx);
+        }
+        sospechosos = new int[listaFinal.size()];
+        for (int i = 0; i < listaFinal.size(); i++) sospechosos[i] = listaFinal.get(i);
+
         // Eliminar sospechosos del sistema de notas
         for (int sospechoso : sospechosos) {
             gestorNotas.eliminarEstudiante(sospechoso);
@@ -136,9 +160,21 @@ public class Edr {
             if (gestorNotas.estaEntregado(vecino)) continue;
 
             int ejerciciosNuevos = contarEjerciciosNuevos(estudiante, vecino);
-            if (ejerciciosNuevos > maxEjerciciosNuevos) {
+            int correctNuevos = contarEjerciciosNuevosCorrectos(estudiante, vecino);
+            int bestCorrect = (mejorVecino == -1 ? 0 : contarEjerciciosNuevosCorrectos(estudiante, mejorVecino));
+
+            // Preferir vecino que aporte más respuestas nuevas CORRECTAS
+            if (correctNuevos > bestCorrect) {
                 maxEjerciciosNuevos = ejerciciosNuevos;
                 mejorVecino = vecino;
+            } else if (correctNuevos == bestCorrect) {
+                // Si hay empate en correctos, preferir más ejercicios nuevos
+                if (ejerciciosNuevos > maxEjerciciosNuevos ||
+                    // En caso de nuevo empate: preferir vecino con índice mayor (derecha/abajo)
+                    (ejerciciosNuevos == maxEjerciciosNuevos && (mejorVecino == -1 || vecino > mejorVecino))) {
+                    maxEjerciciosNuevos = ejerciciosNuevos;
+                    mejorVecino = vecino;
+                }
             }
         }
         return mejorVecino;
@@ -152,6 +188,22 @@ public class Edr {
             if (!gestorExamenes.tieneRespuesta(estudiante, ej) && 
                 gestorExamenes.tieneRespuesta(vecino, ej)) {
                 contador++;
+            }
+        }
+        return contador;
+    }
+
+    private int contarEjerciciosNuevosCorrectos(int estudiante, int vecino) {
+        int contador = 0;
+        int cantidadEjercicios = gestorExamenes.obtenerCantidadEjercicios();
+
+        for (int ej = 0; ej < cantidadEjercicios; ej++) {
+            if (!gestorExamenes.tieneRespuesta(estudiante, ej) && 
+                gestorExamenes.tieneRespuesta(vecino, ej)) {
+                int respuesta = gestorExamenes.obtenerRespuesta(vecino, ej);
+                if (calculadorNotas.esRespuestaCorrecta(ej, respuesta)) {
+                    contador++;
+                }
             }
         }
         return contador;

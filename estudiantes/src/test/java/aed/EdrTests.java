@@ -626,4 +626,91 @@ class EdrTests {
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
+
+    // TEST Nuevos
+    @Test
+    void se_copia_del_vecino_de_adelante() {
+        // El alumno 3 tendrá como vecino 'adelante' al 0 
+        edr.resolver(0, 0, 0);
+        double[] notas_esperadas = new double[]{10.0, 0.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+
+        edr.copiarse(3);
+        notas_esperadas = new double[]{10.0, 0.0, 0.0, 10.0};
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+    }
+
+    @Test
+    void se_copia_hay_dos_vecinos_iguales_y_se_copia() {
+        // El alumno 1 tiene como vecinos al 0 y al 2; ambos ofrecen la misma información
+        edr.resolver(0, 0, 0);
+        edr.resolver(2, 0, 0);
+
+        double[] notas_esperadas = new double[]{10.0, 0.0, 10.0, 0.0};
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+
+        // 1 copia — debe copiarse y obtener 10 puntos (la elección del vecino queda determinada por el tie-break)
+        edr.copiarse(1);
+        notas_esperadas = new double[]{10.0, 10.0, 10.0, 0.0};
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+    }
+
+    @Test
+    void no_hay_nadie_para_copiarse_porque_todos_entregaron() {
+        // Los vecinos del alumno 1 (0 y 2) entregan antes de que 1 intente copiar
+        edr.resolver(0, 0, 0);
+        edr.resolver(2, 2, 2);
+        edr.entregar(0);
+        edr.entregar(2);
+
+        double[] notas_esperadas = new double[]{10.0, 0.0, 10.0, 0.0};
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+
+        // 1 intenta copiar, pero no hay vecinos disponibles (están entregados)
+        edr.copiarse(1);
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+    }
+    
+    @Test
+    void mixto_varios_sospechosos_y_otros_no_sospechosos() {
+        Edr edr_8 = new Edr(d_aula, 8, solucion);
+
+        // Estudiantes 0,1,2 contestan igual para varias preguntas -> deberían ser sospechosos
+        for (int pregunta = 0; pregunta < 3; pregunta++) {
+            edr_8.resolver(0, pregunta, 5);
+            edr_8.resolver(1, pregunta, 5);
+            edr_8.resolver(2, pregunta, 5);
+        }
+
+        // Estudiante 3 y 4 tienen coincidencias parciales que no deberían bastar
+        // (cuando 3 responde distinto, no alcanza el umbral del 25% de otros)
+        edr_8.resolver(3, 0, 6); // sólo coincide con uno o ninguno
+        edr_8.resolver(4, 4, 6);
+
+        // Estudiantes 5,6,7 rellenan respuestas para no alterar
+        edr_8.resolver(5, 7, 7);
+        edr_8.resolver(6, 1, 1);
+        edr_8.resolver(7, 2, 2);
+
+        for (int alumno = 0; alumno < 8; alumno++) {
+            edr_8.entregar(alumno);
+        }
+
+        int[] copiones = edr_8.chequearCopias();
+        int[] copiones_esperados = new int[]{0,1,2};
+        assertTrue(Arrays.equals(copiones_esperados, copiones));
+    }
+
+    @Test
+    void se_copia_uno_del_borde() {
+        // El alumno 2 está en el borde y sólo tiene al vecino 1
+        edr.resolver(1, 5, 5);
+
+        double[] notas_esperadas = new double[]{0.0, 10.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+
+        edr.copiarse(2);
+        notas_esperadas = new double[]{0.0, 10.0, 10.0, 0.0};
+        assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
+    }
 }

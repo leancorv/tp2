@@ -13,9 +13,9 @@ public class Edr {
     private GestorConteo gestorConteo;
     private int ladoAula;
     private int cantidadEstudiantes;
-    private boolean[] historyCopio;
-    private int[] usadoComoFuente;
-    private int[] copioContador;
+    private boolean[] historialDeCopiones;
+    private int[] contadorDeCopiados;
+    private int[] contadorDeCopiones;
 
     public static Edr nuevoEdr(int ladoAula, int cantidadEstudiantes, int[] examenCanonico) {
         return new Edr(ladoAula, cantidadEstudiantes, examenCanonico);
@@ -36,12 +36,12 @@ public class Edr {
             gestorNotas.registrarEstudiante(i);
         }
         // Inicializar trackers de copias
-        this.historyCopio = new boolean[cantidadEstudiantes];
-        this.usadoComoFuente = new int[cantidadEstudiantes];
-        this.copioContador = new int[cantidadEstudiantes];
-        for (int i = 0; i < cantidadEstudiantes; i++) this.historyCopio[i] = false;
-        for (int i = 0; i < cantidadEstudiantes; i++) this.usadoComoFuente[i] = 0;
-        for (int i = 0; i < cantidadEstudiantes; i++) this.copioContador[i] = 0;
+        this.historialDeCopiones = new boolean[cantidadEstudiantes];
+        this.contadorDeCopiados = new int[cantidadEstudiantes];
+        this.contadorDeCopiones = new int[cantidadEstudiantes];
+        for (int i = 0; i < cantidadEstudiantes; i++) this.historialDeCopiones[i] = false;
+        for (int i = 0; i < cantidadEstudiantes; i++) this.contadorDeCopiados[i] = 0;
+        for (int i = 0; i < cantidadEstudiantes; i++) this.contadorDeCopiones[i] = 0;
     }
     
     // OPERACIÓN 2: copiarse
@@ -54,9 +54,9 @@ public class Edr {
         if (mejorVecino != -1) {
             copiarPrimerEjercicio(estudiante, mejorVecino);
             // Registrar que este estudiante copió y que el vecino fue usado como fuente
-            historyCopio[estudiante] = true;
-            copioContador[estudiante]++;
-            usadoComoFuente[mejorVecino]++;
+            historialDeCopiones[estudiante] = true;
+            contadorDeCopiones[estudiante]++;
+            contadorDeCopiados[mejorVecino]++;
         }
     }
     
@@ -130,7 +130,7 @@ public class Edr {
         for (int s : sospechosos) lista.add(s);
         List<Integer> listaFinal = new ArrayList<>();
         for (Integer idx : lista) {
-            if (usadoComoFuente[idx] > copioContador[idx]) continue;
+            if (contadorDeCopiados[idx] > contadorDeCopiones[idx]) continue;
             listaFinal.add(idx);
         }
         sospechosos = new int[listaFinal.size()];

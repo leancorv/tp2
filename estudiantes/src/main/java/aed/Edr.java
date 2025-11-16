@@ -131,8 +131,10 @@ public class Edr {
         int maxEjerciciosNuevos = -1;
         
         for (int vecino : vecinos) {
+            // Ignorar vecinos inválidos (defensivo) y los que ya entregaron
+            if (vecino < 0 || vecino >= cantidadEstudiantes) continue;
             if (gestorNotas.estaEntregado(vecino)) continue;
-            
+
             int ejerciciosNuevos = contarEjerciciosNuevos(estudiante, vecino);
             if (ejerciciosNuevos > maxEjerciciosNuevos) {
                 maxEjerciciosNuevos = ejerciciosNuevos;

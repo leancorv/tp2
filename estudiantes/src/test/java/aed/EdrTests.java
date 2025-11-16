@@ -224,7 +224,7 @@ class EdrTests {
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
 
     }
-/*
+
     @Test
     void todos_copiones() {    //cambiar este test
         double[] notas;
@@ -349,7 +349,7 @@ class EdrTests {
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
 
     }
-
+/*
     @Test
     void alumnos_se_copian_mas_de_una_vez(){
         double[] notas;

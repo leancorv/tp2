@@ -52,9 +52,9 @@ public class GestorNotas {
             if (this.valor < otra.valor) return -1;
             if (this.valor > otra.valor) return 1;
 
-            // 3. Mayor ID tiene prioridad sobre menor ID
-            if (this.estudianteId > otra.estudianteId) return -1;
-            if (this.estudianteId < otra.estudianteId) return 1;
+            // 3. Menor ID tiene prioridad sobre mayor ID
+            if (this.estudianteId < otra.estudianteId) return -1;
+            if (this.estudianteId > otra.estudianteId) return 1;
             return 0;
         }
 

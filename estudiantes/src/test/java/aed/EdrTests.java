@@ -465,7 +465,7 @@ class EdrTests {
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
-/* 
+ 
     @Test 
     void varios_alumnos_se_copian_de_la_darkweb(){
         double[] notas;
@@ -578,7 +578,7 @@ class EdrTests {
 
         assertTrue(Arrays.equals(notas_finales_esperadas, notas_finales));
     }
- */
+
     @Test 
     void no_hay_aliasing_con_los_examenes_subidos(){
         double[] notas;

@@ -201,8 +201,8 @@ public class GestorNotas {
 
         // Ordenar por nota descendente, y en empate por estudianteId descendente
         entregados.sort((a, b) -> {
-            int cmp = Double.compare(b._nota, a._nota);
-            if (cmp != 0) return cmp;
+            int resultadoComparacion = Double.compare(b._nota, a._nota);
+            if (resultadoComparacion != 0) return resultadoComparacion;
             return Integer.compare(b._id, a._id);
         });
 

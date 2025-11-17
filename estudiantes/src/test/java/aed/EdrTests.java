@@ -713,4 +713,437 @@ class EdrTests {
         notas_esperadas = new double[]{0.0, 10.0, 10.0, 0.0};
         assertTrue(Arrays.equals(edr.notas(), notas_esperadas));
     }
+
+    @Test
+    void tests_un_Estudiante_examen_De1ej(){
+        int[] solucion = new int[]{0};
+        Edr edr = new Edr(1,1,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+        edr.resolver(0,0,0);
+
+        edr.copiarse(0);
+        nota = edr.notas();
+        nota_esperada = new double[]{100.0};
+
+        int[] solucionDarkweb = new int[]{4};
+
+        edr.consultarDarkWeb(1, solucionDarkweb);
+        nota = edr.notas();
+        nota_esperada = new double[]{0.0};
+
+        edr.resolver(0,0,0);
+        
+        nota = edr.notas();
+        nota_esperada = new double[]{100.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        edr.entregar(0);
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final= edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{
+            new NotaFinal(100, 0)
+        };
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void tests_un_Estudiante(){
+        int[] solucion = new int[]{0,1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,1,0};
+        Edr edr = new Edr(1,1,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+        edr.resolver(0,0,0);
+
+        edr.copiarse(0);
+        nota = edr.notas();
+        nota_esperada = new double[]{10.0};
+
+        int[] solucionDarkweb = new int[]{0,3,2,2,4,5,7,9,0,9,2,1,4,5,8,3,4,6,8};
+
+        edr.consultarDarkWeb(1, solucionDarkweb);
+        nota = edr.notas();
+        nota_esperada = new double[]{70.0};
+
+        for(int i=0; i<19; i++){
+            edr.resolver(0,i,solucion[i]);
+        }
+        
+        nota = edr.notas();
+        nota_esperada = new double[]{100.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        edr.entregar(0);
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final= edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{
+            new NotaFinal(100, 0)
+        };
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void tests_dos_Estudiantes_examen_grande_sinCopiarse(){
+        int[] solucion = new int[]{0,1,2,3,4,5,6,7,8,9,8,7,6,5,4,3,2,1,0,1};
+        Edr edr = new Edr(2,2,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0, 0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        //Resuelve todo el examen
+        for(int i=0; i<10; i++){
+            edr.resolver(0,i,solucion[i]);
+        }
+
+        for(int i=10; i<19; i++){
+            edr.resolver(1,i,solucion[i]);
+        }
+        edr.resolver(1, 19, 1);
+        
+        nota = edr.notas();
+        nota_esperada = new double[]{50.0,50.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        int[] solucionDarkweb = new int[]{0,1,3,4,5,3,2,4,4,5,1,6,8,0,9,5,3,2,1,1};
+
+        edr.consultarDarkWeb(1, solucionDarkweb);
+        nota = edr.notas();
+        nota_esperada = new double[]{15.0,50.0};  
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        edr.entregar(0);
+        edr.entregar(1);
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final= edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{
+            new NotaFinal(50, 1),
+            new NotaFinal(15, 0)
+        };
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void tests_dos_Estudiantes_examen_De1ej(){
+        int[] solucion = new int[]{0};
+        Edr edr = new Edr(2,2,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0, 0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+        edr.resolver(0,0,0);
+
+        edr.resolver(1,0,6);
+
+        edr.copiarse(0);
+        nota = edr.notas();
+        nota_esperada = new double[]{100.0,0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        int[] solucionDarkweb = new int[]{0};
+
+        edr.consultarDarkWeb(1, solucionDarkweb);
+        nota = edr.notas();
+        nota_esperada = new double[]{100.0,100.0};  
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        edr.entregar(0);
+        edr.entregar(1);
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{0,1};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final= edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{};
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void tests_dos_Estudiantes_soloUnEj_igual(){
+        int[] solucion = new int[]{0,1,2,3,4,5,6,7,8,9};
+        Edr edr = new Edr(2,2,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0, 0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for(int i=0; i<10; i++){
+            edr.resolver(0,i,solucion[i]);
+        }
+
+        for(int i=0; i<10; i++){
+            edr.resolver(1,i,5);
+        }
+
+        nota = edr.notas();
+        nota_esperada = new double[]{100.0,10.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        edr.entregar(0);
+        edr.entregar(1);
+
+        NotaFinal[] nota_final= edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{
+            new NotaFinal(100, 0),
+            new NotaFinal(10, 1)
+        };
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void test_4Estudiantes_100Ejercicios_sin_sospechosos(){
+
+        int[] solucion = new int[100];
+        for (int i = 0; i < 100; i++) {
+            solucion[i] = i % 10;
+        }
+
+        Edr edr = new Edr(3,4,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0, 0.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for(int i=0; i<25; i++){
+            edr.resolver(0,i,solucion[i]);
+        }
+
+        for(int i=25; i<50; i++){
+            edr.resolver(1,i,solucion[i]);
+        }
+
+        for(int i=50; i<75; i++){
+            edr.resolver(2,i,solucion[i]);
+        }
+        
+        for(int i=75; i<100; i++){
+            edr.resolver(3,i,solucion[i]);
+        }
+
+        nota = edr.notas();
+        nota_esperada = new double[]{25.0,25.0,25.0, 25.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        edr.entregar(0);
+        edr.entregar(1);
+        edr.entregar(2);
+        edr.entregar(3);
+
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final= edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{
+            new NotaFinal(25, 3),
+            new NotaFinal(25, 2),
+            new NotaFinal(25, 1),
+            new NotaFinal(25, 0)
+
+        };
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+
+    }
+
+    @Test
+    void test_50Estudiantes_10Ejercicios(){
+        int[] solucion = new int[]{0,1,2,3,4,5,6,7,8,9};
+        Edr edr = new Edr(10,50,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[50];
+            for(int i=0;i<50;i++){
+                nota_esperada[i]=0.0;
+            };
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for(int i=0;i<50;i++){;
+            for(int j=0;j<10;j++){;
+                edr.resolver(i, j, solucion[j]);
+            }
+        }
+
+        nota = edr.notas();
+        nota_esperada = new double[50];
+            for(int i=0;i<50;i++){;
+                nota_esperada[i]=100.0;
+            }
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for(int i=0;i<50;i++){;
+            edr.entregar(i);
+        }
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[50];
+            for(int k=0;k<50;k++){;
+                sospechosos_esperados[k]=k;
+            }
+
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final= edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{};
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void test_100Estudiantes_200Ejercicios(){
+        int[] solucion = new int[200];
+            for (int i = 0; i < 200; i++) {
+                solucion[i] = i % 10;
+            }
+
+        Edr edr = new Edr(10,100,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[100];
+        for (int i = 0; i < 100; i++) {
+            nota_esperada[i] = 0.0;
+        }
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 200; j++) {
+                edr.resolver(i, j, solucion[j]);
+            }
+        }
+        nota = edr.notas();
+        nota_esperada = new double[100];
+        for (int e = 0; e < 100; e++) {
+            nota_esperada[e] = 100.0;  
+        }
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for (int i = 0; i < 100; i++) {
+            edr.entregar(i);
+        }
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[100];
+        for (int i = 0; i < 100; i++) {
+            sospechosos_esperados[i] = i;
+        }
+
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final = edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{};
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void test_2Estudiantes_2000Ejercicios_seCopiaTodo(){
+        int[] solucion = new int[2000];
+            for (int i = 0; i < 2000; i++) {
+                solucion[i] = i % 10;
+            }
+
+        Edr edr = new Edr(2,2,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0,0.0};
+
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for(int i=0; i<2000; i++){
+            edr.resolver(0,i,solucion[i]);
+        }
+
+        for(int i=0; i<2000; i++){
+            edr.copiarse(1);
+        }
+
+        nota = edr.notas();
+        nota_esperada = new double[]{100.0, 100.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        edr.entregar(0);
+        edr.entregar(1);
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{0,1};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final = edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{};
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    @Test
+    void test_Todos_Entregaron_en_blanco(){
+        int[] solucion = new int[]{0,1,2,3,4,5,6,7,8,9};
+        Edr edr = new Edr(3,5,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        for(int i=0; i<5; i++){;
+            edr.entregar(i);
+        }
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final = edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{
+            new NotaFinal(0, 4),
+            new NotaFinal(0, 3),
+            new NotaFinal(0, 2),
+            new NotaFinal(0, 1),
+            new NotaFinal(0, 0)
+        };
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
+
+    void test_Todos_usaron_solucion_de_darkWeb(){
+        int[] solucion = new int[]{0,1,2,3,4,5,6,7,8,9};
+        Edr edr = new Edr(5,15,solucion);
+
+        double[] nota = edr.notas();
+        double[] nota_esperada = new double[15];
+        for(int i=0; i<15;i++){;
+            nota_esperada[i]=0.0;
+        }
+        assertTrue(Arrays.equals(nota, nota_esperada));
+
+        int[] solucion_darkWeb = new int[]{0,1,2,3,4,4,6,7,9,9};
+        edr.consultarDarkWeb(6, solucion_darkWeb);
+
+        for(int i=0; i<15; i++){;
+            edr.entregar(i);
+        }
+
+        int[] sospechosos = edr.chequearCopias();
+        int[] sospechosos_esperados = new int[]{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14};
+        assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
+
+        NotaFinal[] nota_final = edr.corregir();
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{};
+        assertTrue(Arrays.equals(nota_final, nota_final_esperado));
+    }
 }

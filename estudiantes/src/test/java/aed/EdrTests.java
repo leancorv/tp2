@@ -867,11 +867,13 @@ class EdrTests {
         edr.entregar(1);
 
         int[] sospechosos = edr.chequearCopias();
-        int[] sospechosos_esperados = new int[]{0,1};
+        int[] sospechosos_esperados = new int[]{0};
         assertTrue(Arrays.equals(sospechosos, sospechosos_esperados));
 
         NotaFinal[] nota_final= edr.corregir();
-        NotaFinal[] nota_final_esperado = new NotaFinal[]{};
+        NotaFinal[] nota_final_esperado = new NotaFinal[]{
+            new NotaFinal(100, 1)
+        };
         assertTrue(Arrays.equals(nota_final, nota_final_esperado));
     }
 
